@@ -89,69 +89,21 @@ Final Report DSS.pdf
 
 ## Tech Stack
 
-|
-Category
-
-|
-
-Tools
-
-|
-| --- | --- |
-|
-
 Programming
 
-|
+* Python
 
-Python
+* Data Processing
 
-|
-|
+* Pandas
 
-Data Processing
+* Machine Learning
 
-|
+* Scikit-learn
 
-Pandas
+* Optimization
 
-|
-|
 
-Machine Learning
-
-|
-
-Scikit-learn
-
-|
-|
-
-Optimization
-
-|
-
-SciPy
-
-|
-|
-
-Decision Support
-
-|
-
-Newsvendor Model
-
-|
-|
-
-Analytics
-
-|
-
-Statistical Modeling
-
-|
 
 ## Dataset
 
@@ -181,57 +133,6 @@ Final Report DSS.pdf
 
 * Transparent and explainable recommendations
 
-## Results
-
-The system was validated using 55 historical production orders across multiple purchasing scenarios.
-
-Final Report DSS.pdf
-
-|
-Metric
-
-|
-
-Result
-
-|
-| --- | --- |
-|
-
-Validation Batch
-
-|
-
-55 Orders
-
-|
-|
-
-Baseline Gap
-
-|
-
-11% below actual material need
-
-|
-|
-
-Best Scenario
-
-|
-
-11.3% above actual need
-
-|
-|
-
-Primary Constraint
-
-|
-
-Budget Policy
-
-|
 
 ### Key Insight
 
@@ -241,59 +142,6 @@ Even when operational risk assumptions changed, the final recommendation remaine
 
 Final Report DSS.pdf
 
-## Scenario Analysis
-
-Four operational scenarios were evaluated:
-
-|
-Scenario
-
-|
-
-Purpose
-
-|
-| --- | --- |
-|
-
-Base Case
-
-|
-
-Current operating conditions
-
-|
-|
-
-Worst Case
-
-|
-
-Higher production risk
-
-|
-|
-
-Finance Conservative
-
-|
-
-Lower spending tolerance
-
-|
-|
-
-Production Conservative
-
-|
-
-Higher safety stock
-
-|
-
-The production-focused scenario was the only one that fully covered actual material requirements.
-
-Final Report DSS.pdf
 
 ## Business Impact
 
