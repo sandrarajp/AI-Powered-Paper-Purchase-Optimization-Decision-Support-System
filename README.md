@@ -1,10 +1,6 @@
 
 
 # AI-Powered Paper Purchase Optimization Decision Support System
-<img width="922" height="494" alt="Screenshot 2026-07-24 123115" src="https://github.com/user-attachments/assets/fc66a75c-35a9-4e90-8426-115755aa4b66" />
-
-
-
 > Balancing Prediction and Constraint: An Optimization-Based Decision Support System for Job-to-Order Print Manufacturing
 
 An end-to-end Machine Learning + Optimization project that helps print manufacturing companies make smarter paper purchasing decisions under demand uncertainty, budget constraints, and storage limitations.
@@ -12,6 +8,12 @@ An end-to-end Machine Learning + Optimization project that helps print manufactu
 MSc Data Science Final Project – University of Europe for Applied Sciences
 
 Authors: Renato Mateo Silva • Sandra Raj Pattuvakkaran • Okah Ahone Ebwekoh • Sudarsh Mekkampurath Sajeev
+
+<img width="922" height="494" alt="Screenshot 2026-07-24 123115" src="https://github.com/user-attachments/assets/fc66a75c-35a9-4e90-8426-115755aa4b66" />
+
+
+
+
 
 ## Project Overview
 
