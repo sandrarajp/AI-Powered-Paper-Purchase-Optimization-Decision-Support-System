@@ -1,8 +1,9 @@
 
 
-
 # AI-Powered Paper Purchase Optimization Decision Support System
-<img width="635" height="354" alt="Screenshot 2026-07-25 134909" src="https://github.com/user-attachments/assets/d88f37f2-3c67-420e-820d-c43d600d1bb8" />
+<img width="922" height="494" alt="Screenshot 2026-07-24 123115" src="https://github.com/user-attachments/assets/fc66a75c-35a9-4e90-8426-115755aa4b66" />
+
+
 
 > Balancing Prediction and Constraint: An Optimization-Based Decision Support System for Job-to-Order Print Manufacturing
 
