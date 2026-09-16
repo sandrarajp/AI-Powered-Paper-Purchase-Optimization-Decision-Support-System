@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paper Purchase Decision Support System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --kraft: #ECE4D3;
+    --kraft-deep: #DCD0B6;
+    --ink: #23282A;
+    --ink-soft: #55605F;
+    --rust: #B4502E;
+    --rust-deep: #8E3D22;
+    --teal: #2E6E62;
+    --amber: #C08A1E;
+    --paper-white: #FBF9F3;
+    --line: #C9BE9F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--kraft);
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    padding: 32px 20px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+  header{margin-bottom:28px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--rust-deep);
+    margin-bottom:8px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(28px,4vw,42px);
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+    line-height:1.5;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap:24px;
+    margin-top:28px;
+  }
+  @media (max-width: 860px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background:var(--paper-white);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:24px 26px;
+    box-shadow: 0 1px 0 rgba(35,40,42,0.04);
+  }
+  .panel h2{
+    font-family:'Fraunces', serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .panel .panel-note{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:0 0 20px;
+    line-height:1.5;
+  }
+
+  .field{margin-bottom:20px;}
+  .field:last-child{margin-bottom:0;}
+  .field-label{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+  }
+  .field-label label{
+    font-size:13.5px;
+    font-weight:600;
+  }
+  .field-label .what{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    font-weight:400;
+  }
+  .field-controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  input[type=range]{
+    flex:1;
+    -webkit-appearance:none;
+    height:4px;
+    border-radius:2px;
+    background:var(--kraft-deep);
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--rust);
+    border:2px solid var(--paper-white);
+    box-shadow:0 0 0 1px var(--rust);
+    cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:14px;height:14px;border-radius:50%;
+    background:var(--rust); border:2px solid var(--paper-white);
+    box-shadow:0 0 0 1px var(--rust); cursor:pointer;
+  }
+  .numbox{
+    width:88px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:6px 8px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:#fff;
+    color:var(--ink);
+    text-align:right;
+  }
+  .numbox:focus{outline:2px solid var(--teal); outline-offset:1px;}
+
+  .run-btn{
+    margin-top:24px;
+    width:100%;
+    padding:13px 16px;
+    background:var(--ink);
+    color:var(--paper-white);
+    border:none;
+    border-radius:2px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition: background 0.15s ease;
+  }
+  .run-btn:hover{background:var(--rust-deep);}
+  .run-btn:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+
+  .fixed-note{
+    margin-top:16px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+    line-height:1.5;
+  }
+
+  /* results panel */
+  .results-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px 18px;
+    margin-bottom:22px;
+  }
+  .stat{
+    border-left:2px solid var(--kraft-deep);
+    padding-left:10px;
+  }
+  .stat .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+  }
+  .stat .value{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:17px;
+    font-weight:600;
+  }
+  .stat.highlight{border-left-color:var(--rust);}
+  .stat.highlight .value{color:var(--rust-deep); font-size:20px;}
+
+  /* gauge - signature element */
+  .gauge-wrap{
+    margin: 22px 0 6px;
+  }
+  .gauge-title{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .gauge-track{
+    position:relative;
+    height:46px;
+    background:repeating-linear-gradient(45deg, var(--kraft) 0 6px, var(--kraft-deep) 6px 12px);
+    border:1px solid var(--line);
+    border-radius:2px;
+    overflow:visible;
+  }
+  .gauge-fill{
+    position:absolute; top:0; left:0; bottom:0;
+    background: linear-gradient(90deg, var(--teal), #3d8977);
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .gauge-fill.bound-budget, .gauge-fill.bound-storage{
+    background: linear-gradient(90deg, var(--rust-deep), var(--rust));
+  }
+  .gauge-marker{
+    position:absolute; top:-8px; bottom:-8px;
+    width:2px;
+  }
+  .gauge-marker .tick{
+    width:2px; height:100%;
+  }
+  .gauge-marker .mtag{
+    position:absolute;
+    top:-20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    white-space:nowrap;
+    transform: translateX(-50%);
+  }
+  .m-budget .tick{background:var(--amber);}
+  .m-budget .mtag{color:var(--amber);}
+  .m-storage .tick{background:var(--ink-soft);}
+  .m-storage .mtag{color:var(--ink-soft); top:auto; bottom:-20px;}
+  .m-ideal .tick{background:var(--ink); opacity:0.55; border-left:2px dashed var(--ink);background:none;}
+  .m-ideal .mtag{color:var(--ink); opacity:0.75;}
+
+  .binding-flag{
+    margin-top:14px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:6px 12px;
+    border-radius:2px;
+    background:var(--kraft);
+    border:1px solid var(--line);
+  }
+  .binding-flag .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--teal);
+  }
+  .binding-flag.bound .dot{background:var(--rust);}
+
+  .validation{
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .validation strong{color:var(--ink); font-weight:600;}
+  .validation .gapline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    margin-top:4px;
+    display:block;
+  }
+  .gap-short{color:var(--rust-deep);}
+  .gap-cover{color:var(--teal);}
+
+  footer{
+    text-align:center;
+    margin-top:30px;
+    font-size:11px;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Optimization-Based DSS · Demo Mode</div>
+    <h1>Paper Purchase Recommendation</h1>
+    <p class="sub">Adjust the cost and constraint assumptions below, then run the model against this cycle's held-out batch of 55 real historical orders to see how the recommended purchase changes.</p>
+  </header>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <div class="panel">
+      <h2>Adjustable inputs</h2>
+      <p class="panel-note">These are the levers a purchasing manager actually controls. Everything else below is calculated from these plus the fixed order batch.</p>
+
+      <div class="field">
+        <div class="field-label">
+          <label for="holding">Holding cost rate</label>
+          <span class="what">cost of holding $1 excess/month</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="holding" min="0" max="5" step="0.1" value="1.5">
+          <input type="text" class="numbox" id="holdingNum" value="1.5">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">%</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">
+          <label for="stockout">Stockout cost rate</label>
+          <span class="what">cost of $1 shortfall (production stop)</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="stockout" min="0.05" max="1" step="0.01" value="0.408">
+          <input type="text" class="numbox" id="stockoutNum" value="0.408">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">
+          <label for="storage">Storage capacity</label>
+          <span class="what">max $ of paper stock physically held</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="storage" min="50000" max="600000" step="5000" value="300000">
+          <input type="text" class="numbox" id="storageNum" value="300000">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">
+          <label for="budgetFactor">Budget factor</label>
+          <span class="what">% of order value usable as spending ceiling</span>
+        </div>
+        <div class="field-controls">
+          <input type="range" id="budgetFactor" min="5" max="60" step="1" value="28">
+          <input type="text" class="numbox" id="budgetFactorNum" value="28">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">%</span>
+        </div>
+      </div>
+
+      <button class="run-btn" id="runBtn">Run recommendation →</button>
+
+      <p class="fixed-note">
+        <strong>Fixed for this run:</strong> current month's orders are the existing 55-order demo batch (held out from model training) — not free-form input. MOQ is $0 (unused). Paper is fixed at 70% of material cost.
+      </p>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="panel">
+      <h2>Calculated result</h2>
+      <p class="panel-note">Recalculated each time you hit run — these are display-only, driven by the model's prediction and the inputs on the left.</p>
+
+      <div class="results-grid">
+        <div class="stat"><div class="label">Monthly budget</div><div class="value" id="outBudget">—</div></div>
+        <div class="stat"><div class="label">Expected need (μ)</div><div class="value" id="outMu">—</div></div>
+        <div class="stat"><div class="label">Uncertainty (σ)</div><div class="value" id="outSigma">—</div></div>
+        <div class="stat"><div class="label">Critical ratio</div><div class="value" id="outCR">—</div></div>
+        <div class="stat"><div class="label">Ideal purchase</div><div class="value" id="outIdeal">—</div></div>
+        <div class="stat highlight"><div class="label">Recommended purchase</div><div class="value" id="outRec">—</div></div>
+      </div>
+
+      <div class="gauge-wrap">
+        <div class="gauge-title">Purchase relative to budget &amp; storage ceiling</div>
+        <div class="gauge-track" id="gaugeTrack">
+          <div class="gauge-fill" id="gaugeFill" style="width:0%"></div>
+          <div class="gauge-marker m-ideal" id="markIdeal" style="left:0%"><div class="tick"></div><div class="mtag">ideal</div></div>
+          <div class="gauge-marker m-budget" id="markBudget" style="left:0%"><div class="tick"></div><div class="mtag">budget</div></div>
+          <div class="gauge-marker m-storage" id="markStorage" style="left:100%"><div class="tick"></div><div class="mtag">storage cap</div></div>
+        </div>
+        <div class="binding-flag" id="bindingFlag"><span class="dot"></span><span id="bindingText">Binding constraint: —</span></div>
+      </div>
+
+      <div class="validation">
+        <strong>Demo validation</strong> — how this recommendation compares to what the shop actually needed:
+        <span class="gapline" id="gapLine">—</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>Manufacturing Inventory DSS · Job-to-order print production · linear regression + newsvendor optimizer</footer>
+</div>
+
+<script>
+// ---- fixed demo-batch numbers from the notebook ----
+const DEMO = {
+  mu: 42283.42,
+  sigma: 9431.19,
+  totalOpValue: 160536.44,
+  actualTotal: 50484.10
+};
+
+// inverse normal CDF (Acklam's rational approximation)
+function invNorm(p){
+  if (p <= 0) return -Infinity;
+  if (p >= 1) return Infinity;
+  const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02,
+             1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+  const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02,
+             6.680131188771972e+01, -1.328068155288572e+01];
+  const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00,
+             -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+  const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00,
+             3.754408661907416e+00];
+  const plow = 0.02425, phigh = 1 - plow;
+  let q, r;
+  if (p < plow){
+    q = Math.sqrt(-2*Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+           ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  } else if (p <= phigh){
+    q = p - 0.5; r = q*q;
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q /
+           (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+  } else {
+    q = Math.sqrt(-2*Math.log(1-p));
+    return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+            ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+}
+
+const fmt = n => '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+const fmt2 = n => '$' + n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+function syncPair(sliderId, numId, decimals){
+  const s = document.getElementById(sliderId);
+  const n = document.getElementById(numId);
+  s.addEventListener('input', () => { n.value = decimals !== undefined ? Number(s.value).toFixed(decimals) : s.value; });
+  n.addEventListener('change', () => {
+    let v = parseFloat(n.value);
+    if (isNaN(v)) v = parseFloat(s.value);
+    v = Math.min(Math.max(v, parseFloat(s.min)), parseFloat(s.max));
+    s.value = v;
+    n.value = decimals !== undefined ? v.toFixed(decimals) : v;
+  });
+}
+syncPair('holding','holdingNum',1);
+syncPair('stockout','stockoutNum',3);
+syncPair('storage','storageNum',0);
+syncPair('budgetFactor','budgetFactorNum',0);
+
+function run(){
+  const holdingRate = parseFloat(document.getElementById('holdingNum').value)/100;
+  const stockoutRate = parseFloat(document.getElementById('stockoutNum').value);
+  const storageCap = parseFloat(document.getElementById('storageNum').value);
+  const budgetFactor = parseFloat(document.getElementById('budgetFactorNum').value)/100;
+
+  const totalOpValue = DEMO.totalOpValue;
+  const mu = DEMO.mu, sigma = DEMO.sigma;
+
+  const budget = totalOpValue * budgetFactor;
+  let criticalRatio = null, idealPurchase;
+  if (sigma <= 0){
+    idealPurchase = mu;
+  } else {
+    criticalRatio = stockoutRate / (holdingRate + stockoutRate);
+    idealPurchase = mu + sigma * invNorm(criticalRatio);
+  }
+
+  const lower = 0;
+  const upper = Math.min(budget, storageCap);
+  let recommended = Math.max(lower, Math.min(idealPurchase, upper));
+
+  let binding = 'none (interior optimum)';
+  let boundClass = '';
+  if (recommended === upper && idealPurchase > upper){
+    binding = budget < storageCap ? 'budget' : 'storage';
+    boundClass = binding === 'budget' ? 'bound-budget' : 'bound-storage';
+  }
+
+  // ---- write stats ----
+  document.getElementById('outBudget').textContent = fmt(budget);
+  document.getElementById('outMu').textContent = fmt(mu);
+  document.getElementById('outSigma').textContent = fmt(sigma);
+  document.getElementById('outCR').textContent = criticalRatio !== null ? criticalRatio.toFixed(3) : '—';
+  document.getElementById('outIdeal').textContent = fmt(idealPurchase);
+  document.getElementById('outRec').textContent = fmt(recommended);
+
+  // ---- gauge ----
+  const maxScale = Math.max(storageCap, budget, idealPurchase, recommended) * 1.05;
+  const pct = v => Math.max(0, Math.min(100, (v/maxScale)*100));
+
+  const fillEl = document.getElementById('gaugeFill');
+  fillEl.style.width = pct(recommended) + '%';
+  fillEl.className = 'gauge-fill ' + boundClass;
+
+  document.getElementById('markIdeal').style.left = pct(idealPurchase) + '%';
+  document.getElementById('markBudget').style.left = pct(budget) + '%';
+  document.getElementById('markStorage').style.left = pct(storageCap) + '%';
+
+  const flagEl = document.getElementById('bindingFlag');
+  flagEl.classList.toggle('bound', boundClass !== '');
+  document.getElementById('bindingText').textContent = 'Binding constraint: ' + binding;
+
+  // ---- validation ----
+  const gap = recommended - DEMO.actualTotal;
+  const gapPct = (gap/DEMO.actualTotal*100);
+  const gapEl = document.getElementById('gapLine');
+  gapEl.className = 'gapline ' + (gap >= 0 ? 'gap-cover' : 'gap-short');
+  gapEl.textContent = `Recommended ${fmt2(recommended)} vs. actual need ${fmt2(DEMO.actualTotal)} → gap ${gap>=0?'+':''}${fmt2(gap)} (${gapPct>=0?'+':''}${gapPct.toFixed(1)}%) ${gap>=0 ? '— would have covered real need' : '— would have fallen short'}`;
+}
+
+document.getElementById('runBtn').addEventListener('click', run);
+run(); // initial render with baseline values
+</script>
+</body>
+</html>
