@@ -1,5 +1,4 @@
-# AI-Powered-Paper-Purchase-Optimization-Decision-Support-System
-Here's a professional GitHub README.md in a clean GitHub format. You can copy and paste it directly into your repository's `README.md`.
+
 
 # AI-Powered Paper Purchase Optimization Decision Support System
 
